@@ -1,10 +1,8 @@
 import Presentation as presentation
-
+import openAI as gpt
 
 def main():
-    file_path = "Chapter_4.pptx"
-    content = presentation.read_pptx(file_path)
-    print(content)
+    gpt.start_connection()
 
 
 if __name__ == '__main__':
