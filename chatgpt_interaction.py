@@ -16,7 +16,8 @@ def creat_prompt(slide):
     :rtype: str
     """
     return (f"Hello ChatGPT, I have the following content from a slide in a PowerPoint presentation: \n{slide}\n"
-            f" Please summarize the key insights from this slide in the best way possible")
+            f" Please summarize the key insights from this slide in the best way possible, make it short and straight "
+            f"to the point")
 
 async def get_gpt_response(slide):
     """
@@ -27,7 +28,6 @@ async def get_gpt_response(slide):
     :return: A string containing the chatgpt response
     :rtype: str
     """
-    print("Starting async function...")
     message = creat_prompt(slide)
     try:
         response = await client.chat.completions.create(
@@ -40,7 +40,6 @@ async def get_gpt_response(slide):
             model="gpt-3.5-turbo",
             timeout=DEFAULT_TIMEOUT
         )
-        print("async function completed")
         return response.choices[0].message.content.strip()
     except Exception as e:
         return f"An error occurred: {e}"
