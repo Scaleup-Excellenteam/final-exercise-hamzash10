@@ -5,7 +5,7 @@ import asyncio
 
 load_dotenv()
 client = AsyncOpenAI(api_key=os.getenv('OPENAI_API_KEY'))
-
+DEFAULT_TIMEOUT = 10
 def creat_prompt(slide):
     """
     this function creates a prompt for a slide for chatgpt to understand and get the best results
@@ -38,6 +38,7 @@ async def get_gpt_response(slide):
                 }
             ],
             model="gpt-3.5-turbo",
+            timeout=DEFAULT_TIMEOUT
         )
         print("async function completed")
         return response.choices[0].message.content.strip()
