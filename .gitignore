@@ -1,3 +1,4 @@
 *.pptx
 *.txt
 .env
+*.json

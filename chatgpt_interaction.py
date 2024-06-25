@@ -1,6 +1,7 @@
 from openai import AsyncOpenAI
 import os
 from dotenv import load_dotenv
+import asyncio
 
 load_dotenv()
 client = AsyncOpenAI(api_key=os.getenv('OPENAI_API_KEY'))
@@ -26,6 +27,7 @@ async def get_gpt_response(slide):
     :return: A string containing the chatgpt response
     :rtype: str
     """
+    print("Starting async function...")
     message = creat_prompt(slide)
     try:
         response = await client.chat.completions.create(
@@ -37,6 +39,7 @@ async def get_gpt_response(slide):
             ],
             model="gpt-3.5-turbo",
         )
+        print("async function completed")
         return response.choices[0].message.content.strip()
     except Exception as e:
         return f"An error occurred: {e}"
@@ -51,8 +54,10 @@ async def process_slides(slides):
     :return: A list containing the chatgpt response
     :rtype: list<str>
     """
-    responses = list()
+    tasks = []
     for slide in slides:
-        response = await get_gpt_response(slide)
-        responses.append(response)
+        task = asyncio.create_task(get_gpt_response(slide))
+        tasks.append(task)
+
+    responses = await asyncio.gather(*tasks)
     return responses
