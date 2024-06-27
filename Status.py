@@ -1,12 +1,13 @@
 import dataclasses
-import datetime
+from datetime import datetime
 
 @dataclasses.dataclass
 class Status:
     status: str
     filename: str
-    datetime: datetime.datetime
-    explanation: str
+    timestamp: datetime
+    explanation: list
 
     def is_done(self):
         return self.status == 'done'
+
