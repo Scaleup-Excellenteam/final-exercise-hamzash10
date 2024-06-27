@@ -18,6 +18,10 @@ if not os.path.exists(OUTPUT_FOLDER):
 
 
 async def run_explainer():
+    """
+    runs indefinably and search for new PowerPoint files that hasn't yet been explained, sends them
+    to chatgpt and saves the response into jsonfile
+    """
     while True:
         for filename in os.listdir(UPLOAD_FOLDER):
             if (filename[:-5]+".json") not in os.listdir(OUTPUT_FOLDER):
