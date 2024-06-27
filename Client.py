@@ -48,18 +48,3 @@ class Client:
         except Exception as e:
             raise Exception(f"ERROR: {e}")
 
-
-if __name__ == '__main__':
-    client = Client("http://127.0.0.1:5000")
-    try:
-        uid = client.upload("Corona.pptx")
-        sleep(11)
-        status = client.status(uid)
-        print(f"File Status: {status.status}")
-        print(f"Filename: {status.filename}")
-        print(f"Timestamp: {status.timestamp}")
-        print(f"Explanation: {status.explanation}")
-        print(f"Is Done: {status.is_done()}")
-
-    except Exception as e:
-        print(f"An error occurred: {e}")
