@@ -1,12 +1,11 @@
 import os
 import time
 import uuid
-
+from Modules import UPLOAD_FOLDER, OUTPUT_FOLDER
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
-UPLOAD_FOLDER = 'uploads'
-OUTPUT_FOLDER = 'outputs'
+
 
 # make the uploads directory if it doesn't exist
 if not os.path.exists(UPLOAD_FOLDER):

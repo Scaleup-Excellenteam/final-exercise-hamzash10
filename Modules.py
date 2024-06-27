@@ -1,0 +1,2 @@
+UPLOAD_FOLDER = r"C:\Users\2022\PycharmProjects\Excellenteam\FinalProject\final-exercise-hamzash10\uploads"
+OUTPUT_FOLDER = r"C:\Users\2022\PycharmProjects\Excellenteam\FinalProject\final-exercise-hamzash10\outputs"
