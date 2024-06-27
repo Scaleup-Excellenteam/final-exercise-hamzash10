@@ -21,13 +21,13 @@ async def run_explainer():
     while True:
         for filename in os.listdir(UPLOAD_FOLDER):
             if (filename[:-5]+".json") not in os.listdir(OUTPUT_FOLDER):
-                print("DEBUGGING: processing file: " + filename)
+                print("DEBUGGING: processing file: " + filename.split('_')[0] + '.pptx')
                 upload_file_path = os.path.join(UPLOAD_FOLDER, filename)
                 slides_content = read_pptx(upload_file_path)
                 slides_summary = await process_slides(slides_content)
                 output_file_path = os.path.join(OUTPUT_FOLDER, filename[:-5] + ".json")
                 save_to_json(slides_summary, output_file_path)
-                print("DEBUGGING: finished processing file")
+                print("DEBUGGING: finished processing file and saved in 'output' Directory as: " + filename[:-5] + ".json")
 
         sleep(10)
 
