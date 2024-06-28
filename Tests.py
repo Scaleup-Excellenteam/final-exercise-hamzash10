@@ -25,10 +25,10 @@ async def test_system():
     try:
         client = Client("http://127.0.0.1:5000")
         uid = client.upload(SAMPLE_PPTX)
-        data = client.status(uid)  # this will not return the data
+        data = client.status(uid)  # this will not return the explanation
         assert data.is_pending() is True
         sleep(20)  # ensure that the explainer found and processed the data
-        data = client.status(uid)  # this will return the data
+        data = client.status(uid)  # this will return the explanation
         assert data.is_done() is True
     except Exception as e:
         assert False, f"Error: {e}"
