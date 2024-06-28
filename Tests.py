@@ -1,14 +1,40 @@
-import os
-import pytest
-from main import main
+import subprocess
 import sys
+from time import sleep
+import pytest
+from Client import Client
+
+SAMPLE_PPTX = "Corona.pptx"
+
 
 @pytest.mark.asyncio
 async def test_system():
-    # default command line arguments
-    sys.argv = ['Tests.py', 'Corona.pptx']
-    await main()
-    assert os.path.exists("Corona.json"), "Output JSON file does not exist."
+    """
+    verify end-to-end functionality of the system:
+        1_ start the web api and the explainer
+        2_ start the clinet and connect to the web api
+        3_upload a file
+        2_check the status of the file twice
+    """
+    web_api = subprocess.Popen([sys.executable, "Web_API.py"])
+    explainer = subprocess.Popen([sys.executable, "Explainer.py"])
+
+    # ensure that the web_api and the explainer are running
+    sleep(1)
+
+    try:
+        client = Client("http://127.0.0.1:5000")
+        uid = client.upload(SAMPLE_PPTX)
+        data = client.status(uid)  # this will not return the data
+        assert data.is_pending() is True
+        sleep(20)  # ensure that the explainer found and processed the data
+        data = client.status(uid)  # this will return the data
+        assert data.is_done() is True
+    except Exception as e:
+        assert False, f"Error: {e}"
+    finally:
+        web_api.terminate()
+        explainer.terminate()
 
 
 if __name__ == '__main__':
