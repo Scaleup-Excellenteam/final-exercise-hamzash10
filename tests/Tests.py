@@ -1,8 +1,12 @@
+import os
 import subprocess
 import sys
 from time import sleep
 import pytest
-from Client import Client
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from client_package.Client import Client
 
 SAMPLE_PPTX = "Corona.pptx"
 
@@ -16,8 +20,8 @@ async def test_system():
         3_upload a file
         2_check the status of the file twice
     """
-    web_api = subprocess.Popen([sys.executable, "Web_API.py"])
-    explainer = subprocess.Popen([sys.executable, "Explainer.py"])
+    web_api = subprocess.Popen([sys.executable, "client_package/Web_API.py"])
+    explainer = subprocess.Popen([sys.executable, "client_package/Explainer.py"])
 
     # ensure that the web_api and the explainer are running
     sleep(1)

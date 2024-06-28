@@ -2,7 +2,7 @@ from datetime import datetime
 from time import sleep
 
 import requests
-import Status
+from . import Status
 
 
 class Client:

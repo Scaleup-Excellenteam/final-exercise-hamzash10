@@ -9,9 +9,9 @@ from logging.handlers import TimedRotatingFileHandler
 app = Flask(__name__)
 
 
-
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+FLASK_LOG_DIR = os.path.join(parent_dir, 'logs', 'flask_server')
 # check if the logging dir exist
-FLASK_LOG_DIR = os.path.join(os.path.dirname(__file__), 'logs', 'flask_server')
 if not os.path.exists(FLASK_LOG_DIR):
     os.makedirs(FLASK_LOG_DIR)
 

@@ -8,9 +8,9 @@ from Modules import UPLOAD_FOLDER, OUTPUT_FOLDER
 import logging
 from logging.handlers import TimedRotatingFileHandler
 
-
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+EXPLAINER_LOG_DIR = os.path.join(parent_dir, 'logs', 'explainer')
 # check if the logging dir exist
-EXPLAINER_LOG_DIR = os.path.join(os.path.dirname(__file__), 'logs', 'explainer')
 if not os.path.exists(EXPLAINER_LOG_DIR):
     os.makedirs(EXPLAINER_LOG_DIR)
 
