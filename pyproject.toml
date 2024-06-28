@@ -6,8 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "client-package"
 version = "0.1.0"
 description = "A Python package that processes PowerPoint files using ChatGPT to generate summaries."
-authors = ["Hamza Abu Shaheen"]
-license = "MIT"
+authors = [{ name = "Hamza Abu Shaheen", email = "hamzashaheen.HAS@gmail.com"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
@@ -22,10 +21,14 @@ logging = "*"
 pptx = "*"
 dataclasses = "*"
 flask = "*"
-pytest = "*"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.0"
 
 [tool.poetry.scripts]
 client-package-cli = 'client_package.Client:main'
+
+[tool.setuptools]
+packages = [
+    "client_package"
+]
