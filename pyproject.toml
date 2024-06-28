@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "client-package"
+version = "0.1.0"
+description = "A Python package that processes PowerPoint files using ChatGPT to generate summaries."
+authors = ["Hamza Abu Shaheen"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+openai = "*"
+python-dotenv = "*"
+asyncio = "*"
+datetime = "*"
+presentation-reader = "*"
+chatgpt-interaction = "*"
+json-handler = "*"
+logging = "*"
+pptx = "*"
+dataclasses = "*"
+flask = "*"
+pytest = "*"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.0"
+
+[tool.poetry.scripts]
+client-package-cli = 'client_package.Client:main'
