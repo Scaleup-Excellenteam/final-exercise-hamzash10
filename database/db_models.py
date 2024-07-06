@@ -4,7 +4,6 @@ from typing import List
 from datetime import datetime
 import sys, os
 
-DB_NAME = "mydatabase.db"
 class Base(DeclarativeBase):
     pass
 
@@ -41,14 +40,5 @@ class Upload(Base):
     def __repr__(self) -> str:
         return f"Upload(id={self.id!r}, uid={self.uid!r}, filename={self.filename!r}, status={self.status!r})"
 
-
-
-if not os.path.exists(DB_NAME):
-    engine = create_engine(f"sqlite:///{DB_NAME}", echo=True)
-    Base.metadata.create_all(bind=engine)
-
-def get_session():
-    Session = sessionmaker()
-    return Session()
 
 
