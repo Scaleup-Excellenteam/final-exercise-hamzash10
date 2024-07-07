@@ -2,7 +2,6 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship,
 from sqlalchemy import create_engine, String, Integer, ForeignKey, DateTime, UUID
 from typing import List
 from datetime import datetime
-import sys, os
 
 class Base(DeclarativeBase):
     pass
