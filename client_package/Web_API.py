@@ -56,9 +56,7 @@ def upload_file():
     if 'file' not in request.files:
         return jsonify({'error': 'No file found in the request'}), 400
 
-    email = ""
-    if 'email' in request.args:
-        email = request.args['email']
+    email = request.args['email']
 
     uploaded_file = request.files['file']
     if uploaded_file.filename == '':
@@ -87,43 +85,39 @@ def status():
     :return: JSON response with the all the details required
     """
     received_uid = request.args.get('uid')
-    if not received_uid:
+    received_filename = request.args.get('filename')
+    received_email = request.args.get('email')
+    if not received_uid and not (received_filename and received_email):
         # bad request
-        return jsonify({'error': 'No received UID'}), 400
+        return jsonify({'error': 'No received UID or Filename and Email'}), 400
 
-    # check the outputs folder
-    for full_filename in os.listdir(OUTPUT_FOLDER):
-        if received_uid in full_filename:
-            with open(os.path.join(OUTPUT_FOLDER, full_filename), 'r') as f:
-                explanation = f.read()
+    # fetch the upload from the db
+    # if uid was received
+    if received_uid:
+        upload = db_controller.get_upload_by_uid(received_uid)
+    # if email and filename was received
+    else:
+        upload = db_controller.get_upload_by_filename_email(received_filename,received_email)
 
-            filename, timestamp, uid_and_extension = full_filename.split('_')
+    full_filename = f"{received_uid}.json" # fix
+    if full_filename in os.listdir(OUTPUT_FOLDER):
+        with open(os.path.join(OUTPUT_FOLDER, full_filename), 'r') as f:
+            explanation = f.read()
+        # ok
+        return jsonify({
+            'status': upload.status,
+            'filename': upload.filename,
+            'upload_time': upload.upload_time,
+            'finish_time': upload.finish_time,
+            'explanation': explanation
+        }), 200
 
-            # ok
-            return jsonify({
-                'status': 'done',
-                'filename': filename,
-                'timestamp': timestamp,
-                'explanation': explanation
-            }), 200
-
-    # check the uploads folder
-    for full_filename in os.listdir(UPLOAD_FOLDER):
-        if received_uid in full_filename:
-            filename, timestamp, uid_and_extension = full_filename.split('_')
-            # Accepted ( the file exist but hasn't been processed yet )
-            return jsonify({
-                'status': 'pending',
-                'filename': filename,
-                'timestamp': timestamp,
-                'explanation': ''
-            }), 202
-
-    # Not Found
+    # otherwise Not Found
     return jsonify({
         'status': 'not found',
         'filename': '',
-        'timestamp': '',
+        'upload_time': '',
+        'finish_time': '',
         'explanation': ''
     }), 404
 

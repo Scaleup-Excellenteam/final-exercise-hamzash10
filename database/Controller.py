@@ -1,3 +1,5 @@
+import uuid
+
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 import os
@@ -70,6 +72,18 @@ def upload_file(uid, filename, upload_time, finish_time, status, user_id=0):
     session.add(file)
     session.commit()
 
+def get_upload_by_uid(uid):
+    """
+    getting an upload file by uid
+    :param uid: file's uid
+    :return: the upload file
+    """
+    uid_as_uuid = uuid.UUID(uid)
+    return session.query(db.Upload).filter(db.Upload.uid == uid_as_uuid).first()
+
+def get_upload_by_filename_email(filename, email):
+    user = get_user(email)
+    return session.query(db.Upload).join(db.User).filter(db.Upload.user_id == user.id, db.Upload.filename == filename).first()
 
 def delete_file(uid):
     """
