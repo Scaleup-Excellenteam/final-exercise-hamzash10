@@ -5,7 +5,8 @@ from datetime import datetime
 class Status:
     status: str
     filename: str
-    timestamp: datetime
+    upload_time: datetime
+    finish_time: datetime
     explanation: list
 
     def is_done(self):

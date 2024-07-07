@@ -56,7 +56,9 @@ def upload_file():
     if 'file' not in request.files:
         return jsonify({'error': 'No file found in the request'}), 400
 
-    email = request.args['email']
+    email=None
+    if 'email' in request.args:
+        email = request.args['email']
 
     uploaded_file = request.files['file']
     if uploaded_file.filename == '':
