@@ -1,7 +1,7 @@
 import uuid
 
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, asc
 import os
 import database.db_models as db
 
@@ -25,7 +25,6 @@ def get_user(user_email):
     """
     user = session.query(db.User).filter(user_email == db.User.email).first()
     return add_user(user_email) if user is None else user
-
 
 def add_user(user_email):
     """
@@ -83,7 +82,10 @@ def get_upload_by_uid(uid):
 
 def get_upload_by_filename_email(filename, email):
     user = get_user(email)
-    return session.query(db.Upload).join(db.User).filter(db.Upload.user_id == user.id, db.Upload.filename == filename).first()
+    filename_without_extension = filename[:-5]
+    return session.query(db.Upload).join(db.User).filter(
+        db.Upload.user_id == user.id,
+        db.Upload.filename == filename_without_extension).order_by(asc(db.Upload.upload_time)).first()
 
 def delete_file(uid):
     """
@@ -94,3 +96,22 @@ def delete_file(uid):
     if file:
         session.delete(file)
         session.commit()
+
+def get_pending():
+    """
+     Retrieve all pending uploads from the database.
+    :return: List of db.Upload objects representing pending uploads.
+    """
+    return session.query(db.Upload).filter(db.Upload.status == 'pending').all()
+
+def peoccessed_by_explainer(uid, finish_time):
+    """
+    update the data in the database and changes the status to done
+    :param uid:
+    :param finish_time:
+    :return:
+    """
+    upload = session.query(db.Upload).filter_by(uid=uid).first()
+    upload.status = 'done'
+    upload.finish_time = finish_time
+    session.commit()

@@ -99,7 +99,7 @@ def status():
     else:
         upload = db_controller.get_upload_by_filename_email(received_filename,received_email)
 
-    full_filename = f"{received_uid}.json" # fix
+    full_filename = f"{upload.uid}.json"
     if full_filename in os.listdir(OUTPUT_FOLDER):
         with open(os.path.join(OUTPUT_FOLDER, full_filename), 'r') as f:
             explanation = f.read()
