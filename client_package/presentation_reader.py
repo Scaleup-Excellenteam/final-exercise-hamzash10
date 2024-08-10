@@ -11,29 +11,18 @@ def read_pptx(file_path):
     :rtype: list<string>
     """
     ptx = pptx.Presentation(file_path)
-    content = ""
-    content_lst = list()
+    slide_content = []
+    slides_lst = []
     for slide_number, slide in enumerate(ptx.slides, start=1):
-
-        empty_slide = True
-
         # Iterate through each shape in the slide
         for shape in slide.shapes:
-
             # Check if the shape has text
-            if hasattr(shape, "text"):
+            if hasattr(shape, "text") and shape.text.strip():
+                slide_content.append(f"{shape.text.strip()}\n")
 
-                # add the slide number only if it's not empty
-                if empty_slide:
-                    empty_slide = False
-                    content += f"Slide {slide_number}:\n"
+        if slide_content:
+            print(slide_content)
+            slides_lst.append("\n".join(line for line in slide_content if line.strip()))
+            slide_content.clear()
 
-                content += shape.text + '\n'
-
-        if not empty_slide:
-            # remove whitespaces
-            stripped_content = content.strip().splitlines()
-            content_lst.append("\n".join(line for line in stripped_content if line.strip()))
-            content = ""
-
-    return content_lst
+    return slides_lst
