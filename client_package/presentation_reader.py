@@ -21,7 +21,6 @@ def read_pptx(file_path):
                 slide_content.append(f"{shape.text.strip()}\n")
 
         if slide_content:
-            print(slide_content)
             slides_lst.append("\n".join(line for line in slide_content if line.strip()))
             slide_content.clear()
 

@@ -10,7 +10,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 from client_package.Client import Client
 
 SAMPLE_PPTX = "Corona.pptx"
-
+URL="http://127.0.0.1:5000"
 
 @pytest.fixture(scope="module")
 def start_services():
@@ -33,7 +33,7 @@ async def test_explainer_processes_new_files(start_services):
     checks if the explainer process only newly uploaded files
     :param start_services:
     """
-    client = Client("http://127.0.0.1:5000")
+    client = Client(URL)
     # the number of files should be equal
     uploaded_files = os.listdir("uploads")
     output_files = os.listdir("outputs")

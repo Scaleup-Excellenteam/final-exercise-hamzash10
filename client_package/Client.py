@@ -5,13 +5,33 @@ from . import Status
 
 
 class Client:
+    """
+    client class for interacting with the server for file uploads and status checks.
+
+    Attributes:
+        base_url (str): The base URL of the server.
+    """
+    SUPPORTED_EXTENSION = 'pptx'
     def __init__(self, base_url):
         self.base_url = base_url
+
+    def is_supported_file(self, file_path):
+        """
+        Checks if the file extension is supported.
+        :param file_path: The path to the file
+        :return: True if the file extension is supported, otherwise False
+        """
+        file_extension = file_path.split('.')[-1].lower()
+        return file_extension == self.SUPPORTED_EXTENSION
 
     def upload(self, file_path):
         """
         this method uploads a file to the server and returns the UID.
         """
+        if not self.is_supported_file(file_path):
+            raise Exception(
+                f"unsupported file type. Please upload a {self.SUPPORTED_EXTENSION} file"
+            )
         upload_url = f"{self.base_url}/upload"
         try:
             with open(file_path, 'rb') as f:

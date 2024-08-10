@@ -8,40 +8,40 @@ from logging.handlers import TimedRotatingFileHandler
 
 app = Flask(__name__)
 
+def configuration():
+    parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    FLASK_LOG_DIR = os.path.join(parent_dir, 'logs', 'flask_server')
 
-parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-FLASK_LOG_DIR = os.path.join(parent_dir, 'logs', 'flask_server')
+    # Create the logging directory if it doesn't exist
+    if not os.path.exists(FLASK_LOG_DIR):
+        os.makedirs(FLASK_LOG_DIR)
 
-# Create the logging directory if it doesn't exist
-if not os.path.exists(FLASK_LOG_DIR):
-    os.makedirs(FLASK_LOG_DIR)
+    # Configure TimedRotatingFileHandler for daily log rotation
+    log_file = os.path.join(FLASK_LOG_DIR, 'web_api.log')
+    handler = TimedRotatingFileHandler(log_file, when='midnight', interval=1, backupCount=5)
+    handler.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]')
+    handler.setFormatter(formatter)
 
-# Configure TimedRotatingFileHandler for daily log rotation
-log_file = os.path.join(FLASK_LOG_DIR, 'web_api.log')
-handler = TimedRotatingFileHandler(log_file, when='midnight', interval=1, backupCount=5)
-handler.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]')
-handler.setFormatter(formatter)
+    # Add the handler to the Flask's default logger
+    if not app.logger.hasHandlers():
+        app.logger.addHandler(handler)
+    app.logger.setLevel(logging.DEBUG)
 
-# Add the handler to the Flask's default logger
-if not app.logger.hasHandlers():
-    app.logger.addHandler(handler)
-app.logger.setLevel(logging.DEBUG)
-
-# Additionally, add the handler to the root logger
-root_logger = logging.getLogger()
-if not root_logger.hasHandlers():
-    root_logger.addHandler(handler)
-root_logger.setLevel(logging.DEBUG)
+    # Additionally, add the handler to the root logger
+    root_logger = logging.getLogger()
+    if not root_logger.hasHandlers():
+        root_logger.addHandler(handler)
+    root_logger.setLevel(logging.DEBUG)
 
 
-# make the uploads directory if it doesn't exist
-if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
+    # make the uploads directory if it doesn't exist
+    if not os.path.exists(UPLOAD_FOLDER):
+        os.makedirs(UPLOAD_FOLDER)
 
-# make the outputs directory if it doesn't exist
-if not os.path.exists(OUTPUT_FOLDER):
-    os.makedirs(OUTPUT_FOLDER)
+    # make the outputs directory if it doesn't exist
+    if not os.path.exists(OUTPUT_FOLDER):
+        os.makedirs(OUTPUT_FOLDER)
 
 
 @app.route('/upload', methods=['POST'])
@@ -70,6 +70,7 @@ def upload_file():
         #app.logger.error("invalid file")
         return jsonify({'error': 'Invalid file'}), 400
 
+configuration()
 
 @app.route('/status', methods=['GET'])
 def status():
